@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(()=>{
     const fetchMeals = async() => {
@@ -22,6 +23,7 @@ const AvailableMeals = () => {
         )
       }
       setMeals(loadedMeals)
+      setIsLoading(false)
     }
     fetchMeals()
 
@@ -38,11 +40,14 @@ const AvailableMeals = () => {
   ));
 
   return (
-    <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
-    </section>
+        <section className={classes.meals}>
+        <Card>
+        {!isLoading ? (
+          <ul>{mealsList}</ul>
+          ) : <h1>Loading...</h1>}
+        </Card>
+      </section>
+      
   );
 };
 
