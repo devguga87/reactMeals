@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([])
+  const [error,setError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(()=>{
     const fetchMeals = async() => {
+     try{
       const response = await fetch('https://react-http-fdcaa-default-rtdb.firebaseio.com/meals.json')
       const responseData = await response.json()
       const loadedMeals = [] 
@@ -24,6 +26,10 @@ const AvailableMeals = () => {
       }
       setMeals(loadedMeals)
       setIsLoading(false)
+     }catch(error){
+      setError(true)
+      setIsLoading(false)
+     }
     }
     fetchMeals()
 
@@ -39,12 +45,13 @@ const AvailableMeals = () => {
     />
   ));
 
+
   return (
         <section className={classes.meals}>
         <Card>
-        {!isLoading ? (
+        {!isLoading && !error ? (
           <ul>{mealsList}</ul>
-          ) : <h1>Loading...</h1>}
+          ) : error ? <h1>Ocorreu um erro inesperado</h1> : <h1>Loading...</h1>}
         </Card>
       </section>
       
